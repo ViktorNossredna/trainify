@@ -24,7 +24,7 @@ def root(request):
         store_message(message)
         return message
     else:
-        message = 'Pappa bajsar en stor bajs!'
+        message = 'Pappa bajsar en zippad bajs!'
         store_message(message)
         return message
 
