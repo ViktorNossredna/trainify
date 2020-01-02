@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
-            HTML Bajs kanske
-        </title>
-    </head>
-    <body>
-        <h1>
-            En hoett tag!
-        </h1>
-        Inte en saedan man har pae sig
-    </body>
+
+<head>
+    <title>
+        HTML Bajs kanske
+    </title>
+</head>
+
+<body>
+    <h1>
+        En hoett tag!
+    </h1>
+
+    <h2>Latest traing sessions:</h2>
+    <ul>
+        {% for training_session in training_sessions %}
+        <li> {{ training_session }} </li>
+        {% endfor %}
+    </ul>
+
+</body>
+
 </html>

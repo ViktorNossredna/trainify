@@ -27,7 +27,13 @@ def root(request):
     else:
         message = 'Pappa bajsar en zippad bajs!'
         store_message(message)
-        return render_template("index.html")
+        training_sessions = [
+            datetime.datetime(2020, 1, 1, 15, 00),
+            datetime.datetime(2019, 1, 2, 15, 30),
+            datetime.datetime(2019, 1, 5, 15, 30),
+            datetime.datetime(2019, 1, 6, 15, 30),
+            datetime.datetime(2020, 1, 1, 14, 30)]
+        return render_template("index.html", training_sessions=training_sessions)
 
 def store_message(message):
     print(f'storing message: {message} to datastore with kind {message_kind}')
