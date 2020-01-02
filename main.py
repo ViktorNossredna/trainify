@@ -1,4 +1,5 @@
 import datetime
+from flask import render_template, Flask, request
 from google.cloud import datastore
 
 datastore_client = datastore.Client()
@@ -26,7 +27,7 @@ def root(request):
     else:
         message = 'Pappa bajsar en zippad bajs!'
         store_message(message)
-        return message
+        return render_template("index.html")
 
 def store_message(message):
     print(f'storing message: {message} to datastore with kind {message_kind}')
@@ -37,3 +38,12 @@ def store_message(message):
     })
 
     datastore_client.put(entity)
+
+if __name__ == "__main__":
+    app = Flask(__name__)
+
+    @app.route('/')
+    def index():
+        return root(request)
+
+    app.run('127.0.0.1', 8080, debug=True)
