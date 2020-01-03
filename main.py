@@ -1,5 +1,5 @@
 import datetime
-from flask import render_template, Flask, request
+from flask import render_template, Flask, request, redirect, url_for
 from google.cloud import datastore
 
 datastore_client = datastore.Client()
@@ -14,7 +14,14 @@ def root(request):
         Response object using
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
+    print("start root function")
     request_json = request.get_json()
+
+    if request.form and 'workout_description' in request.form:
+        form_input = request.form['workout_description']
+        print(f"Form input: {form_input}")
+        store_message(form_input)
+        return redirect(url_for('index'))
 
     if request.args and 'message' in request.args:
         message = request.args.get('message')
@@ -25,8 +32,7 @@ def root(request):
         store_message(message)
         return message
     else:
-        message = 'Pappa bajsar en zippad bajs!'
-        store_message(message)
+        print("Displaying start page")
         training_sessions = [
             datetime.datetime(2020, 1, 1, 15, 00),
             datetime.datetime(2019, 1, 2, 15, 30),
@@ -50,6 +56,10 @@ if __name__ == "__main__":
 
     @app.route('/')
     def index():
+        return root(request)
+
+    @app.route('/', methods=['POST'])
+    def index_post():
         return root(request)
 
     app.run('127.0.0.1', 8080, debug=True)
