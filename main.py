@@ -1,9 +1,10 @@
 import datetime
-from flask import render_template, Flask, request, redirect, url_for
+from flask import render_template, Flask, request, redirect, url_for, Blueprint
 from google.cloud import datastore
-
 datastore_client = datastore.Client()
 message_kind = 'bajs'
+
+is_running_in_cloud = True
 
 def root(request):
     """Responds to any HTTP request.
@@ -15,13 +16,16 @@ def root(request):
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
     print("start root function")
+
     request_json = request.get_json()
 
     if request.form and 'workout_description' in request.form:
         form_input = request.form['workout_description']
         print(f"Form input: {form_input}")
         store_message(form_input)
-        return redirect(url_for('index'))
+        cloud_url = 'https://europe-west1-python-example-app.cloudfunctions.net/hello-bajs-1'
+        redirect_url = cloud_url if is_running_in_cloud else url_for('.index')
+        return redirect(redirect_url)
 
     if request.args and 'message' in request.args:
         message = request.args.get('message')
@@ -52,6 +56,8 @@ def store_message(message):
     datastore_client.put(entity)
 
 if __name__ == "__main__":
+    is_running_in_cloud = False
+
     app = Flask(__name__)
 
     @app.route('/')
