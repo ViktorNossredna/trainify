@@ -20,7 +20,7 @@
         <h2>Latest workout sessions:</h2>
         <ul>
             {% for training_session in training_sessions %}
-            <li> {{ training_session }} </li>
+            <li> {{ training_session.timestamp }} - {{ training_session.message }} </li>
             {% endfor %}
         </ul>
     </div>

@@ -37,12 +37,8 @@ def root(request):
         return message
     else:
         print("Displaying start page")
-        training_sessions = [
-            datetime.datetime(2020, 1, 1, 15, 00),
-            datetime.datetime(2019, 1, 2, 15, 30),
-            datetime.datetime(2019, 1, 5, 15, 30),
-            datetime.datetime(2019, 1, 6, 15, 30),
-            datetime.datetime(2020, 1, 1, 14, 30)]
+        training_sessions = fetch_workouts(10)
+
         return render_template("index.html", training_sessions=training_sessions)
 
 def store_message(message):
@@ -54,6 +50,14 @@ def store_message(message):
     })
 
     datastore_client.put(entity)
+
+def fetch_workouts(limit):
+    query = datastore_client.query(kind=message_kind)
+    query.order = ['-timestamp']
+
+    workouts = query.fetch(limit=limit)
+
+    return workouts
 
 if __name__ == "__main__":
     is_running_in_cloud = False
