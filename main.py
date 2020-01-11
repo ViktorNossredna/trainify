@@ -23,7 +23,7 @@ def root(request):
         form_input = request.form['workout_description']
         print(f"Form input: {form_input}")
         store_message(form_input)
-        cloud_url = 'https://europe-west1-python-example-app.cloudfunctions.net/hello-bajs-1'
+        cloud_url = 'https://europe-west1-python-example-app.cloudfunctions.net/trainify'
         redirect_url = cloud_url if is_running_in_cloud else url_for('.index')
         return redirect(redirect_url)
 
